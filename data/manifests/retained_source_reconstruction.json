@@ -1,0 +1,23 @@
+{
+  "boundary": "Hashes authenticate locally retained third-party media bytes; the media are not redistributed.",
+  "hash_groups_with_more_than_one_retained_id": 19,
+  "input_sha256": "efbebdac5e86d1263cc49e02b2782a6cd432285784594dfe37ea8d1e1b5cb908",
+  "output_sha256": "7f06aed9bbf2856a1f7d12637dbbe2056d0b0a49ec1018dfb75de733bb74adbe",
+  "raw_video_sha256_available": true,
+  "rows": 3516,
+  "schema_version": "retained_raw_video_hashes_v10_v1",
+  "source_datasets": {
+    "hockey": 909,
+    "movies2": 1959,
+    "rwf2000": 181,
+    "surv_fight": 248,
+    "violent_flows": 219
+  },
+  "splits": {
+    "test": 526,
+    "train": 2460,
+    "val": 530
+  },
+  "unique_raw_video_sha256": 3497,
+  "unique_video_ids": 3516
+}

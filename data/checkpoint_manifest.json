@@ -1,0 +1,36 @@
+{
+  "schema_version": "jrtip_checkpoint_manifest_v10_v1",
+  "checkpoints": [
+    {
+      "id": "movinet_a2_k600_pretrained_v2",
+      "role": "base initialization loaded by the evaluated model constructor before the task checkpoint",
+      "sha256": "d54a6bfdde4e4b39c1533d985d13af684a681c5abadc62f9e27bb7be8bab272c",
+      "included_in_local_package": true,
+      "path": "code/training_code/train_movinet_violence/MoViNet-pytorch/weights/modelA2_statedict_v2",
+      "license": "MoViNet-pytorch MIT license included with the vendored module"
+    },
+    {
+      "id": "m1_seed50900_t50_best",
+      "role": "continuous one-call-per-update reference",
+      "sha256": "547452c10cf354fc5578977163ba3c75d24f36243a6a3d10072930326b81111a",
+      "included_in_local_package": true,
+      "path": "checkpoints/m1_dense_s1_best.pt",
+      "release_note": "Author-trained task checkpoint; SHA-256 verified against the frozen evidence ledger."
+    },
+    {
+      "id": "m3_seed50902_t50_best",
+      "role": "conditional-routing temporal classifier",
+      "sha256": "004445a74504435a0e51fa4cb1c0c77659779ff3a1985877c6a08151ee0202ee",
+      "included_in_local_package": true,
+      "path": "checkpoints/m3_gated_best.pt",
+      "release_note": "Author-trained task checkpoint; SHA-256 verified against the frozen evidence ledger."
+    },
+    {
+      "id": "ultralytics_yolo11n",
+      "role": "person detector prerequisite",
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "included_in_local_package": false,
+      "acquisition": "downloaded by Ultralytics using the model identifier yolo11n.pt"
+    }
+  ]
+}

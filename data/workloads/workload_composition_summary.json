@@ -1,0 +1,120 @@
+{
+  "builder_input_manifest_sha256": "2bf6908066df3c59a4ec619ae70bef958c64b7d6af12b9468b37fd8ea812b336",
+  "builder_test_pool_n": 585,
+  "corpus_lineage_sha256": "4f01b5209dc0c2fe7a181444c9d514549252be484d58fcf12fb9b1060a4abd1c",
+  "files": {
+    "builder_input_manifest.csv": {
+      "input_sha256": "2bf6908066df3c59a4ec619ae70bef958c64b7d6af12b9468b37fd8ea812b336",
+      "sanitized_sha256": "a2c1e7be04b42a092ed5be6032198959775cc3f948425b65a84f94b2a02835d6"
+    },
+    "kinetic_rich/selection.csv": {
+      "input_sha256": "5882254a878cd77804401d99b5d80c88c88c5a840d0e1ff286eabdf3aacec331",
+      "sanitized_sha256": "41762f73a9807603a771eae425ea678dfdd7dc0963b53f940e8bf89216a965ba"
+    },
+    "kinetic_rich/sidecar_events.json": {
+      "input_sha256": "b3bc0565a60191718e72eaa5fa409667dfad1ea8ddb428fcda14f2eb50cba303",
+      "sanitized_sha256": "f041606459a849069ef3e8d07bf6c08d9dad639c9f466299e7f0f28e53540ea0"
+    },
+    "kinetic_rich/sidecar_events_timeline.json": {
+      "input_sha256": "75a9e146f6f123486fbe3f7fe1dc1a8dcc842946dfe53224b9aec4ff3cd2e862",
+      "sanitized_sha256": "df3a2e449b666d71322606fd2a08d244e49804e03710b3888057b65c8877a4fb"
+    },
+    "mixed_controlled/selection.csv": {
+      "input_sha256": "7fadfbacc69802a9f9d588ac0f18573ff9afbbcffc3a19be9c7d55b4ef31ad93",
+      "sanitized_sha256": "b7a4461b33883fdfb075d5c8437cace2c120cbb57a6aadc85cad77300926564e"
+    },
+    "mixed_controlled/sidecar_events.json": {
+      "input_sha256": "73398e3c4c51842a167c5d4f07b44aec53bc4f5f0dea0ea7a41c6fd2ed68925a",
+      "sanitized_sha256": "d6261c87813bee475694c52af41749787c32e0c259d0a438006214ebb867685f"
+    },
+    "mixed_controlled/sidecar_events_timeline.json": {
+      "input_sha256": "2d766ff83a7e9ef7bef29485937145e584de6f810b41d96f273368ded94d596f",
+      "sanitized_sha256": "48d7fd6e993757a907d88d7524b6b066c22d115c37d8399b20fc4ef9271efa67"
+    },
+    "normal_only/selection.csv": {
+      "input_sha256": "3170b86cf0054cff9913562d8c74f4bfbcc924cd2d6b8015bf63b85c4e0bdcf6",
+      "sanitized_sha256": "5edaf548522b855240055228dd1938a26a096529003f8c124c3ffe60c5c9a6c3"
+    },
+    "normal_only/sidecar_events.json": {
+      "input_sha256": "6e1953f61afb47b1ef70df25d900d97059ce3d6be20af9021a6618dd26794541",
+      "sanitized_sha256": "ad984a82783f63b6d174397a2c6254143ed40c9d1e03b49e38081a7690ba1d6d"
+    },
+    "workload_manifest.json": {
+      "input_sha256": "f34a833c37bc75d7dc967dd4292e3947953fc1097ea83c465ddf48e470f37d65",
+      "sanitized_sha256": "f34a833c37bc75d7dc967dd4292e3947953fc1097ea83c465ddf48e470f37d65"
+    }
+  },
+  "sanitization": "original_path and resolved_source removed; all other fields preserved",
+  "schema_version": "jrtip_workload_sidecars_v10_v1",
+  "workloads": {
+    "kinetic_rich": {
+      "builder_pool_split_counts": {
+        "test": 149
+      },
+      "final_semantic_group_split_counts": {
+        "excluded": 13,
+        "test": 16,
+        "train": 106,
+        "val": 14
+      },
+      "normal_segments": 0,
+      "runtime_label_access": "forbidden",
+      "selected_segments": 149,
+      "selected_source_duration_sec": 601.438349,
+      "source_dataset_counts": {
+        "hockey": 33,
+        "movies2": 78,
+        "rwf2000": 20,
+        "surv_fight": 7,
+        "violent_flows": 11
+      },
+      "violence_segments": 149
+    },
+    "mixed_controlled": {
+      "builder_pool_split_counts": {
+        "test": 156
+      },
+      "final_semantic_group_split_counts": {
+        "excluded": 21,
+        "test": 18,
+        "train": 103,
+        "val": 14
+      },
+      "normal_segments": 142,
+      "runtime_label_access": "forbidden",
+      "selected_segments": 156,
+      "selected_source_duration_sec": 600.5038059999999,
+      "source_dataset_counts": {
+        "hockey": 35,
+        "movies2": 81,
+        "rwf2000": 13,
+        "surv_fight": 11,
+        "violent_flows": 16
+      },
+      "violence_segments": 14
+    },
+    "normal_only": {
+      "builder_pool_split_counts": {
+        "test": 153
+      },
+      "final_semantic_group_split_counts": {
+        "excluded": 21,
+        "test": 20,
+        "train": 89,
+        "val": 23
+      },
+      "normal_segments": 153,
+      "runtime_label_access": "forbidden",
+      "selected_segments": 153,
+      "selected_source_duration_sec": 600.270216,
+      "source_dataset_counts": {
+        "hockey": 30,
+        "movies2": 90,
+        "rwf2000": 11,
+        "surv_fight": 13,
+        "violent_flows": 9
+      },
+      "violence_segments": 0
+    }
+  }
+}

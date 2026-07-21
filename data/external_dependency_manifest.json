@@ -1,0 +1,26 @@
+{
+  "schema_version": "external_dependencies_v10_v1",
+  "dependencies": [
+    {
+      "id": "josenet_official_source",
+      "role": "JOSENet architecture imported by training_code/official_video_models.py",
+      "source": "https://github.com/ispamm/JOSENet",
+      "paper": "https://arxiv.org/abs/2405.02961",
+      "included": false,
+      "reason": "The upstream repository does not state a redistribution license; obtain it directly from the authors.",
+      "evaluated_file_sha256": {
+        "architectures.py": "d2f141594e7661624e441cd30165adaef4e6884507a7316be36cdd013752954f",
+        "README.md": "42967a56dc437e48c19dabb6a45ab9ddd55f46b28159ed30bd4ecc6f4ead87b6",
+        "config/primary.yaml": "7f7f59398f47a5aa3e63e372022d3c6db04b221137fabe747246d8065657feb0"
+      }
+    },
+    {
+      "id": "ultralytics_yolo11n",
+      "role": "person detector used by the routed replay prerequisite",
+      "source": "https://github.com/ultralytics/ultralytics",
+      "included": false,
+      "acquisition": "Install the recorded Ultralytics version and acquire yolo11n.pt through the upstream model identifier.",
+      "evaluated_weight_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+    }
+  ]
+}

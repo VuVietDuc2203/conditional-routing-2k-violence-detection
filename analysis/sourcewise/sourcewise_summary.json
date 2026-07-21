@@ -1,0 +1,107 @@
+{
+  "aggregation_rule": {
+    "external": "mean and sample SD across exactly three independent seeds per source",
+    "locked": "single frozen checkpoint point estimate per source",
+    "metrics": "binary accuracy, macro-F1, and TN/FP/FN/TP; source assigned by canonical manifest video_id"
+  },
+  "analysis_type": "post hoc aggregation of frozen predictions; no inference",
+  "canonical_test_n": 526,
+  "external_models": [
+    "c3d",
+    "i3d",
+    "josenet",
+    "resnet_lstm",
+    "slowfast",
+    "swin3d"
+  ],
+  "external_seed_rule": [
+    50900,
+    50901,
+    50902
+  ],
+  "files": {
+    "sourcewise_cohort_csv": "sourcewise_cohort.csv",
+    "sourcewise_external_summary_csv": "sourcewise_external_summary.csv",
+    "sourcewise_results_csv": "sourcewise_results.csv"
+  },
+  "input_sha256": {
+    "external": "5818029070cd107bda7b01216ae11ac1e7aeb5f5f6b36b4b874b240aa70613b3",
+    "m1_dense": "a005416116239bb55594b52401354bda1af42ef5f746570b8854d2cf63193144",
+    "m3_crowd": "a77f0a0d2a7c768c9ee0ecad854bb78c578fc435db0fabd0e3520f4060a68f29",
+    "manifest": "4f01b5209dc0c2fe7a181444c9d514549252be484d58fcf12fb9b1060a4abd1c",
+    "routed_offline": "9d4775123fc4c6bae648087e5fe77386b99aadc8f0692ffc16b7f712fe3d0845"
+  },
+  "locked_checkpoint_seeds": {
+    "m1_dense": 50900,
+    "m3_crowd": 50902,
+    "routed_offline": 50902
+  },
+  "locked_endpoints": [
+    "m1_dense",
+    "m3_crowd",
+    "routed_offline"
+  ],
+  "overall_locked_endpoints": {
+    "m1_dense": {
+      "accuracy": 0.967680608365019,
+      "correct": 509,
+      "fn": 11,
+      "fp": 6,
+      "macro_f1": 0.9676074348580516,
+      "n": 526,
+      "tn": 242,
+      "tp": 267
+    },
+    "m3_crowd": {
+      "accuracy": 0.9543726235741445,
+      "correct": 502,
+      "fn": 10,
+      "fp": 14,
+      "macro_f1": 0.9541811846689896,
+      "n": 526,
+      "tn": 234,
+      "tp": 268
+    },
+    "routed_offline": {
+      "accuracy": 0.94106463878327,
+      "correct": 495,
+      "fn": 13,
+      "fp": 18,
+      "macro_f1": 0.9408025383825073,
+      "n": 526,
+      "tn": 230,
+      "tp": 265
+    }
+  },
+  "pre_amendment_artifacts_excluded": [
+    "pipeline_artifacts/stage4_prime_analysis/paired_v2_seed50900/stage4_prime_paired_accuracy_analysis.json"
+  ],
+  "schema_version": "sourcewise_v10_v1",
+  "source_counts": {
+    "hockey": {
+      "n": 136,
+      "non_violence": 63,
+      "violence": 73
+    },
+    "movies2": {
+      "n": 293,
+      "non_violence": 144,
+      "violence": 149
+    },
+    "rwf2000": {
+      "n": 27,
+      "non_violence": 7,
+      "violence": 20
+    },
+    "surv_fight": {
+      "n": 37,
+      "non_violence": 18,
+      "violence": 19
+    },
+    "violent_flows": {
+      "n": 33,
+      "non_violence": 16,
+      "violence": 17
+    }
+  }
+}

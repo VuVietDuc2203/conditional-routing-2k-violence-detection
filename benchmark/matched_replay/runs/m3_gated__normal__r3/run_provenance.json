@@ -1,0 +1,24 @@
+{
+  "checkpoint_sha256": "004445a74504435a0e51fa4cb1c0c77659779ff3a1985877c6a08151ee0202ee",
+  "command_release_note": "The machine-specific absolute command line is omitted from the public copy. Executed options are preserved by the released wrapper, runner, system manifest, per-run summary, source/checkpoint hashes, and run identifier.",
+  "host_manifest_sha256": "074d118384b8467f7e144318448dbd4639ff27d3228c361d69f8eb0761d0b36f",
+  "idle_samples": {
+    "memory_used_mib": [
+      6801,
+      6801,
+      6801,
+      6801
+    ],
+    "utilization_percent": [
+      2,
+      2,
+      3,
+      4
+    ]
+  },
+  "mode": "m3_gated",
+  "repeat": 3,
+  "run_id": "m3_gated__normal__r3",
+  "source_sha256": "13408f70bb6988d345631eb011ec6b93448acd89c4097115f8f4014f4b1263fc",
+  "workload": "normal"
+}

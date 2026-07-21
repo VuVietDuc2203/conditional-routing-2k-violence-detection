@@ -1,0 +1,17 @@
+torch==2.11.0+cu130
+torchvision==0.26.0+cu130
+opencv-python==4.13.0.92
+numpy==2.3.5
+pandas==2.3.3
+scikit-learn==1.7.2
+matplotlib==3.10.6
+psutil==7.0.0
+ultralytics==8.3.253
+tqdm==4.67.1
+PyYAML==6.0.3
+einops==0.8.2
+fvcore==0.1.5.post20221221
+iopath==0.1.10
+yacs==0.1.8
+termcolor==3.3.0
+tabulate==0.9.0

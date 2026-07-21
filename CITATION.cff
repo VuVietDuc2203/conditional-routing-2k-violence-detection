@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite the associated manuscript."
+title: "Conditional Routing for 2K Violence Detection: Reproducibility Artifact"
+type: software
+authors:
+  - family-names: "Vu"
+    given-names: "Duc Viet"
+    orcid: "https://orcid.org/0009-0003-4793-3289"
+version: "0.10.0-pre"
+abstract: "Frozen predictions, source-wise analyses, and matched 2K replay provenance for a conditional violence-detection routing study."

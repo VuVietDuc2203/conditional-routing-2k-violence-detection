@@ -1,0 +1,39 @@
+{
+  "schema_version": "jrtip_matched_workload_manifest_v10_v1",
+  "raw_media_included": false,
+  "reason": "derived replay media contain third-party source video and are represented by stable IDs and hashes pending license review",
+  "builder": {
+    "path": "code/validation_code/build_streaming_workloads.py",
+    "sha256": "cbca65224e3f260610c73c3dc0cc545774c5b0b3779bc362766b1d751827e9c9",
+    "input_manifest": "data/workloads/builder_input_manifest.csv",
+    "input_manifest_original_sha256": "2bf6908066df3c59a4ec619ae70bef958c64b7d6af12b9468b37fd8ea812b336",
+    "legacy_split_test_pool_n": 585,
+    "seed": 50900,
+    "mixed_violence_duration_target": 0.10
+  },
+  "sanitized_selection_evidence": "data/workloads/workload_composition_summary.json",
+  "protocol": {
+    "resolution": "2560x1440",
+    "source_fps": 30,
+    "analysis_fps": 8,
+    "warmup_source_seconds": 60,
+    "measured_source_seconds": 600
+  },
+  "workloads": [
+    {
+      "id": "normal",
+      "filename": "normal_only_1440p30.mp4",
+      "sha256": "13408f70bb6988d345631eb011ec6b93448acd89c4097115f8f4014f4b1263fc"
+    },
+    {
+      "id": "mixed",
+      "filename": "mixed_controlled_1440p30.mp4",
+      "sha256": "6cee6d9b78ce800049fb71a9cbaa428fc34bcc6d5e463bbd491ad2b325c79a8d"
+    },
+    {
+      "id": "kinetic",
+      "filename": "kinetic_rich_1440p30.mp4",
+      "sha256": "557aa23bf1173bf512d0ecfb0b7844b3cf94e8ae5c8fd6500446740e5baee906"
+    }
+  ]
+}

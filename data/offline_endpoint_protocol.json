@@ -1,0 +1,63 @@
+{
+  "schema_version": "offline_endpoint_protocol_v10_v1",
+  "crowd_centric_classifier_cache": {
+    "role": "training and locked clip-classifier endpoint",
+    "manifest": "m3_stage4_prime_v2_manifest.csv",
+    "manifest_sha256": "2c06bb79caa0ab1342b2a8be84da351ab8bd431aadfaa29559d1fe17530938ad",
+    "configuration": {
+      "person_confidence": 0.25,
+      "cluster_min_points": 2,
+      "iou_gate": 0.5,
+      "velocity_gate": 0.03,
+      "persistence_frames": 1,
+      "crowd_retention_frames": 3,
+      "sample_hz": 8.0,
+      "clip_length": 50
+    },
+    "boundary": "preprocessed clip cache; no online armed/cooldown/rearm state"
+  },
+  "offline_routed_evaluator": {
+    "role": "locked 526-video routed accuracy and q_video endpoint",
+    "code": "code/training_code/benchmark_m3_cppstack_from_m1_cache.py",
+    "code_sha256": "436960ca2fa62a24dc7c67c3eb5d3b685601c883e88abd6b74398068c5b66817",
+    "configuration": {
+      "yolo_batch": true,
+      "yolo_batch_size": 50,
+      "person_confidence": 0.25,
+      "detector_input_size": 640,
+      "tracker": "bytetrack.yaml",
+      "iou_gate": 0.85,
+      "velocity_gate": 0.05,
+      "persistence_frames": 2,
+      "crowd_retention_frames": 3,
+      "full_clip_on_gate": true,
+      "classification_threshold": 0.475,
+      "cluster_min_points": 2,
+      "hdbscan_epsilon": 0.0
+    },
+    "fallback_semantics": "If no tracked T50 stack completes but the gate passes, the evaluator constructs a sequence from the first T50 full-clip snapshots after complete clip processing. That sequence is not guaranteed to equal the causal runtime window at the first route decision.",
+    "boundary": "batched offline clip evaluator with fresh per-video state; not the replay ARMED/COOLDOWN state machine"
+  },
+  "complete_replay_runtime": {
+    "role": "matched operational call-schedule and execution endpoint",
+    "configuration": {
+      "yolo_batch": false,
+      "person_confidence": 0.25,
+      "detector_input_size": 640,
+      "tracker": "bytetrack.yaml",
+      "iou_gate": 0.85,
+      "velocity_gate": 0.05,
+      "persistence_frames": 2,
+      "rearm_frames": 2,
+      "crowd_retention_frames": 3,
+      "classification_threshold": 0.475,
+      "cluster_min_points": 2,
+      "hdbscan_epsilon": 0.0
+    },
+    "boundary": "per-frame runtime with rolling global history and per-crowd armed/cooldown/rearm state; execution endpoint, not replay event accuracy"
+  },
+  "source_evidence": {
+    "final_evidence_summary_sha256": "28f8b945b506d62d637b64adc1a1a073dd5edfffb3e8f3573b2990ea260eb1a4",
+    "routed_predictions_sha256": "9d4775123fc4c6bae648087e5fe77386b99aadc8f0692ffc16b7f712fe3d0845"
+  }
+}

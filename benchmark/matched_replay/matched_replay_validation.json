@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "analyzed_frames_by_workload": {
+      "kinetic": [
+        4800
+      ],
+      "mixed": [
+        4800
+      ],
+      "normal": [
+        4800
+      ]
+    },
+    "cell_counts": {
+      "m1_dense_s1/kinetic": 3,
+      "m1_dense_s1/mixed": 3,
+      "m1_dense_s1/normal": 3,
+      "m3_gated/kinetic": 3,
+      "m3_gated/mixed": 3,
+      "m3_gated/normal": 3
+    },
+    "checkpoint_hashes": {
+      "m1_dense_s1": [
+        "547452c10cf354fc5578977163ba3c75d24f36243a6a3d10072930326b81111a"
+      ],
+      "m3_gated": [
+        "004445a74504435a0e51fa4cb1c0c77659779ff3a1985877c6a08151ee0202ee"
+      ]
+    },
+    "completion_marker_hashes": true,
+    "dense_q_update_exactly_one": true,
+    "process_is_replicate": "mean, sample SD, min and max across three independent process runs; process is replicate",
+    "raw_hash_failures": 0,
+    "resource_failures": 0,
+    "run_count": 18,
+    "source_hashes": {
+      "kinetic": [
+        "557aa23bf1173bf512d0ecfb0b7844b3cf94e8ae5c8fd6500446740e5baee906"
+      ],
+      "mixed": [
+        "6cee6d9b78ce800049fb71a9cbaa428fc34bcc6d5e463bbd491ad2b325c79a8d"
+      ],
+      "normal": [
+        "13408f70bb6988d345631eb011ec6b93448acd89c4097115f8f4014f4b1263fc"
+      ]
+    }
+  },
+  "failures": [],
+  "status": "pass"
+}
