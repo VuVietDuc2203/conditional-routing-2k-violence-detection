@@ -87,7 +87,6 @@ detector acquisition remains documented separately.
 
 ## Release gate
 
-The completed benchmark ledger and task checkpoints are present. Before public
-deposit, add the repository URL and Zenodo DOI, then regenerate the artifact
-manifest and archive checksums for the deposited bytes. Do not cite this local
-directory as publicly archived until the DOI resolves.
+The completed benchmark ledger and task checkpoints are present in the public
+repository at <https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection>.
+The Zenodo DOI will be added after the archival release is minted.

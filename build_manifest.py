@@ -26,6 +26,7 @@ def main() -> None:
         for path in ROOT.rglob("*")
         if path.is_file()
         and path.name not in excluded
+        and ".git" not in path.parts
         and "__pycache__" not in path.parts
         and path.suffix.lower() != ".pyc"
     ]
@@ -37,7 +38,8 @@ def main() -> None:
         "schema_version": "jrtip_artifact_manifest_v10_v1",
         "file_count": len(rows),
         "files": rows,
-        "public_release_status": "pending GitHub/Zenodo deposit",
+        "public_release_status": "public GitHub repository; Zenodo DOI pending",
+        "repository_url": "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection",
         "raw_third_party_video_included": False,
     }
     (ROOT / "ARTIFACT_MANIFEST.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
