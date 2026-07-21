@@ -9,4 +9,5 @@ authors:
 version: "1.0.0"
 date-released: "2026-07-21"
 repository-code: "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection"
+doi: "10.5281/zenodo.21465979"
 abstract: "Frozen predictions, source-wise analyses, and matched 2K replay provenance for a conditional violence-detection routing study."

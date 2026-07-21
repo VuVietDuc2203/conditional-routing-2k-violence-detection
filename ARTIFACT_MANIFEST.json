@@ -9,8 +9,8 @@
     },
     {
       "path": "CITATION.cff",
-      "size_bytes": 580,
-      "sha256": "84edca297d29c84c9aecf2275cfe4ff40b997af3b682389d22a2fe09b7431c43"
+      "size_bytes": 611,
+      "sha256": "fee9c469a0dffe044cf4665686625bbb8c731f04f8cc11f9d676d8efb685941b"
     },
     {
       "path": "DATA_SOURCES.md",
@@ -34,8 +34,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 6161,
-      "sha256": "8ba2b2bb87b6a0c1d85e84e576f5ee1ec4279f70dfa2c2f9120a80b5d42a8ec3"
+      "size_bytes": 6152,
+      "sha256": "c2c91329f9d6532bf5da88f25017c6e210ff3029c4e1dfb2b997bbe778064045"
     },
     {
       "path": "REPRODUCE.md",
@@ -669,8 +669,8 @@
     },
     {
       "path": "build_manifest.py",
-      "size_bytes": 1654,
-      "sha256": "025b5c9fd621f31c156173d3ebbe9a07ed1179d14f7b2f558c729dc953042ee8"
+      "size_bytes": 1712,
+      "sha256": "ac1cd0d6d3db9680c61135b5ad2d3d3321c24fa7165f250d2ed6c1bc5c94d1f9"
     },
     {
       "path": "checkpoints/m1_dense_s1_best.pt",
@@ -1063,7 +1063,8 @@
       "sha256": "b78138533d25702852e633e971d1f292d3c6841725bf19568f1a5eb519fe2d6b"
     }
   ],
-  "public_release_status": "public GitHub repository; Zenodo DOI pending",
+  "public_release_status": "public GitHub repository and archived Zenodo release",
   "repository_url": "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection",
+  "version_doi": "10.5281/zenodo.21465979",
   "raw_third_party_video_included": false
 }

@@ -88,5 +88,5 @@ detector acquisition remains documented separately.
 ## Release gate
 
 The completed benchmark ledger and task checkpoints are present in the public
-repository at <https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection>.
-The Zenodo DOI will be added after the archival release is minted.
+repository at <https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection>
+and archived at <https://doi.org/10.5281/zenodo.21465979>.

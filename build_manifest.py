@@ -38,8 +38,9 @@ def main() -> None:
         "schema_version": "jrtip_artifact_manifest_v10_v1",
         "file_count": len(rows),
         "files": rows,
-        "public_release_status": "public GitHub repository; Zenodo DOI pending",
+        "public_release_status": "public GitHub repository and archived Zenodo release",
         "repository_url": "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection",
+        "version_doi": "10.5281/zenodo.21465979",
         "raw_third_party_video_included": False,
     }
     (ROOT / "ARTIFACT_MANIFEST.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
