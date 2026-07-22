@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "audit_pass": true,
+  "protocol": "jvcir_same_pipeline_replay_v11",
+  "candidate_equivalence_pairs": 9,
+  "candidate_equivalence_sha256": "e031110e9e6a87c217875e998b5dca7769e5d37171113ebcba33755db8e53b5e",
+  "note": "Release sanitization gate derived from the sealed 9/9 candidate-equivalence audit."
+}

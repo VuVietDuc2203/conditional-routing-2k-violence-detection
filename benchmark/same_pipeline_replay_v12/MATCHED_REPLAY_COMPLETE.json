@@ -1,0 +1,13 @@
+{
+  "aggregate_sha256": "7848a8d327e9b246e96607d7a26d81c7ad438bb6329dcb80d95bd16c034eaa04",
+  "candidate_equivalence_pass": true,
+  "candidate_equivalence_sha256": "e031110e9e6a87c217875e998b5dca7769e5d37171113ebcba33755db8e53b5e",
+  "created_utc": "2026-07-22T11:08:21.879828+00:00",
+  "ledger_sha256": "db152131717074a3b096f0fa916552aa00eb8e56cca3dda00cab4d89680bc92b",
+  "payload_rows": 6,
+  "protocol": "jvcir_same_pipeline_replay_v11",
+  "run_count": 18,
+  "runner_sha256": "10a8a2f278e6cce3de4f12cbda6893b052a7eb63d9012382c5c2ff105c0bc211",
+  "status": "complete",
+  "system_manifest_sha256": "47409c6e3d217e3990553c55223b69299c2aafd9919a593d276edf7e2bea90ae"
+}

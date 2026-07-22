@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this artifact, please cite the associated manuscript."
-title: "Conditional Routing for 2K Violence Detection: Reproducibility Artifact"
+title: "Kinematic Routing for Violence Recognition: Reproducibility Artifact"
 type: software
 authors:
   - family-names: "Vu"
     given-names: "Duc Viet"
     orcid: "https://orcid.org/0009-0003-4793-3289"
-version: "1.0.0"
-date-released: "2026-07-21"
+version: "1.2.0"
+date-released: "2026-07-22"
 repository-code: "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection"
 doi: "10.5281/zenodo.21465979"
-abstract: "Frozen predictions, source-wise analyses, and matched 2K replay provenance for a conditional violence-detection routing study."
+abstract: "Frozen-prediction accuracy--invocation evidence, candidate-equivalence audits, and matched 1440p same-pipeline replay provenance for a kinematic classifier-invocation study."

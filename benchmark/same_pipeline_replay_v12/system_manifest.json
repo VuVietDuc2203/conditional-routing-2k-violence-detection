@@ -1,0 +1,33 @@
+{
+  "analysis_fps": 8.0,
+  "benchmark_runner_sha256": "8e55245b37e6e3ae44c694bf3c62b20763e0ad69b0caf1f50faedc4c60441fbd",
+  "cpu_model": "Intel(R) Core(TM) Ultra 9 285K",
+  "created_utc": "2026-07-22T05:44:41.043165+00:00",
+  "cuda_version": "13.0",
+  "duration_sec": 600.0,
+  "gpu_query": "NVIDIA GeForce RTX 5090, 32607 MiB, 595.79",
+  "idle_gate": {
+    "maximum_memory_range_mib": 128,
+    "maximum_utilization_ceiling_percent": 25,
+    "median_utilization_ceiling_percent": 15,
+    "memory_ceiling_mib": 10000,
+    "sample_spacing_sec": 2,
+    "samples_per_attempt": 4
+  },
+  "label_access": "forbidden_in_runtime",
+  "logical_processors": 24,
+  "loop_source": true,
+  "os": "Windows-11-10.0.26200-SP0",
+  "physical_cores": 24,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "precision": "FP32 (--no-amp)",
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "release_note": "Hostname and absolute Python executable path were removed from the public copy.",
+  "source_fps": 30.0,
+  "source_loop_policy": "rewind the same hash-verified file only when needed to complete 60 s warm-up plus 600 s measured source time",
+  "torch_version": "2.11.0+cu130",
+  "total_ram_bytes": 68143677440,
+  "total_ram_gib": 63.4637451171875,
+  "warmup_sec": 60.0,
+  "wrapper_sha256": "10a8a2f278e6cce3de4f12cbda6893b052a7eb63d9012382c5c2ff105c0bc211"
+}

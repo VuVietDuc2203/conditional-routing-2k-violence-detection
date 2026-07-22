@@ -35,12 +35,12 @@ def main() -> None:
         for path in sorted(files, key=lambda item: item.relative_to(ROOT).as_posix())
     ]
     payload = {
-        "schema_version": "jrtip_artifact_manifest_v10_v1",
+        "schema_version": "jvcir_artifact_manifest_v12_v1",
         "file_count": len(rows),
         "files": rows,
-        "public_release_status": "public GitHub repository and archived Zenodo release",
+        "public_release_status": "v1.2.0 upload-ready; publish as a new GitHub/Zenodo version before submission",
         "repository_url": "https://github.com/VuVietDuc2203/conditional-routing-2k-violence-detection",
-        "version_doi": "10.5281/zenodo.21465979",
+        "prior_version_doi": "10.5281/zenodo.21465979",
         "raw_third_party_video_included": False,
     }
     (ROOT / "ARTIFACT_MANIFEST.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

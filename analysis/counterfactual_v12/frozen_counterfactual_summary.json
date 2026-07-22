@@ -1,0 +1,66 @@
+{
+  "protocol": "jvcir_v12_frozen_prediction_video_call_skip_counterfactual",
+  "endpoint_boundary": "video-level post-hoc counterfactual; no re-inference and no same-pipeline runtime equivalence",
+  "skipped_prediction_rule": "predefined normal label (0)",
+  "invoked_statuses": [
+    "success",
+    "success_full_clip_on_gate"
+  ],
+  "input_hashes": {
+    "m3_predictions_sha256": "a77f0a0d2a7c768c9ee0ecad854bb78c578fc435db0fabd0e3520f4060a68f29",
+    "router_predictions_sha256": "9d4775123fc4c6bae648087e5fe77386b99aadc8f0692ffc16b7f712fe3d0845",
+    "manifest_sha256": "6f300bc7bcc926d99f795bd67229614375a6f489e37441f609c6e8d662be43aa"
+  },
+  "bypass": {
+    "n": 526,
+    "correct": 502,
+    "accuracy": 0.9543726235741445,
+    "macro_f1": 0.9541811846689896,
+    "tn": 234,
+    "fp": 14,
+    "fn": 10,
+    "tp": 268
+  },
+  "route_on": {
+    "n": 526,
+    "correct": 494,
+    "accuracy": 0.9391634980988594,
+    "macro_f1": 0.9390365809489315,
+    "tn": 235,
+    "fp": 13,
+    "fn": 19,
+    "tp": 259
+  },
+  "invocation": {
+    "invoked_videos": 489,
+    "total_videos": 526,
+    "q_video": 0.9296577946768061
+  },
+  "accuracy_difference_route_on_minus_bypass": -0.01520912547528519,
+  "paired_mcnemar": {
+    "route_on_only_correct": 1,
+    "bypass_only_correct": 9,
+    "discordant": 10,
+    "exact_two_sided_p": 0.021484375
+  },
+  "semantic_group_bootstrap": {
+    "replicates": 10000,
+    "seed": 50900,
+    "resampling_unit": "semantic_group_id",
+    "group_count": 502,
+    "accuracy_difference_route_on_minus_bypass": {
+      "mean": -0.015276980697706595,
+      "ci95_percentile": [
+        -0.028790786948176605,
+        -0.003795066413662229
+      ]
+    }
+  },
+  "paired_outcome_categories": {
+    "both_correct": 493,
+    "route_on_only_correct": 1,
+    "bypass_only_correct": 9,
+    "both_wrong": 23
+  },
+  "sourcewise_interpretation": "descriptive only; source strata are unequal and do not estimate external-domain generalization"
+}

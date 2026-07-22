@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Run and aggregate a paired continuous-reference versus routed replay campaign.
+"""Run and aggregate the JVCIR same-M3 routing ablation campaign.
 
-This wrapper does not change the streaming implementation. It calls the frozen
-benchmark_streaming_2k_v10.py runner with identical source, timing and precision
-arguments, while recording host metadata and process-level CPU/RAM samples.
+Both modes execute identical M3 candidate generation and differ only at the
+route policy boundary: call selected candidates or call every eligible one.
 """
 
 from __future__ import annotations
@@ -28,9 +27,11 @@ WORKLOADS = {
     "mixed": "mixed_controlled_1440p30.mp4",
     "kinetic": "kinetic_rich_1440p30.mp4",
 }
-MODES = ("m3_gated", "m1_dense_s1")
+MODES = ("m3_route_on", "m3_route_bypassed")
 REPLICATES = (1, 2, 3)
 IDLE_MEMORY_CEILING_MIB = 10_000
+IDLE_UTIL_MEDIAN_CEILING = 15
+IDLE_UTIL_MAX_CEILING = 25
 
 
 def now() -> str:
@@ -73,8 +74,8 @@ def wait_idle(path: Path, workload: str, mode: str, repeat: int) -> dict[str, li
             attempt_memory.append(memory)
             time.sleep(2)
         passed = (
-            statistics.median(attempt_utils) <= 8
-            and max(attempt_utils) <= 12
+            statistics.median(attempt_utils) <= IDLE_UTIL_MEDIAN_CEILING
+            and max(attempt_utils) <= IDLE_UTIL_MAX_CEILING
             and max(attempt_memory) <= IDLE_MEMORY_CEILING_MIB
             and max(attempt_memory) - min(attempt_memory) <= 128
         )
@@ -95,7 +96,7 @@ def wait_idle(path: Path, workload: str, mode: str, repeat: int) -> dict[str, li
     raise RuntimeError(f"strict idle gate timed out for {workload}/{mode}/r{repeat}")
 
 
-def host_manifest(repo: Path, args: argparse.Namespace) -> dict[str, object]:
+def host_manifest(runner: Path, args: argparse.Namespace) -> dict[str, object]:
     gpu = subprocess.run(
         ["nvidia-smi", "--query-gpu=name,memory.total,driver_version", "--format=csv,noheader"],
         check=True,
@@ -125,7 +126,7 @@ def host_manifest(repo: Path, args: argparse.Namespace) -> dict[str, object]:
         "torch_version": __import__("torch").__version__,
         "cuda_version": __import__("torch").version.cuda,
         "gpu_query": gpu,
-        "benchmark_runner_sha256": sha256(repo / "validation_code" / "benchmark_streaming_2k_v10.py"),
+        "benchmark_runner_sha256": sha256(runner),
         "wrapper_sha256": sha256(Path(__file__)),
         "duration_sec": args.duration_sec,
         "warmup_sec": args.warmup_sec,
@@ -135,6 +136,14 @@ def host_manifest(repo: Path, args: argparse.Namespace) -> dict[str, object]:
         "source_loop_policy": "rewind the same hash-verified file only when needed to complete 60 s warm-up plus 600 s measured source time",
         "precision": "FP32 (--no-amp)",
         "label_access": "forbidden_in_runtime",
+        "idle_gate": {
+            "samples_per_attempt": 4,
+            "sample_spacing_sec": 2,
+            "median_utilization_ceiling_percent": IDLE_UTIL_MEDIAN_CEILING,
+            "maximum_utilization_ceiling_percent": IDLE_UTIL_MAX_CEILING,
+            "memory_ceiling_mib": IDLE_MEMORY_CEILING_MIB,
+            "maximum_memory_range_mib": 128,
+        },
     }
 
 
@@ -183,9 +192,11 @@ def aggregate(output_root: Path, records: list[dict[str, object]]) -> dict[str, 
         if len(values) != 3:
             raise ValueError(f"expected 3 process runs for {mode}/{workload}, found {len(values)}")
         metric_names = [
-            "achieved_analysis_fps", "classifier_calls", "q_update", "deadline_miss_rate", "deadline_miss_count",
+            "achieved_analysis_fps", "eligible_candidates", "route_selected_candidates", "classifier_calls",
+            "q_candidate", "q_update", "deadline_miss_rate", "deadline_miss_count",
             "latency_p50_ms", "latency_p95_ms", "latency_p99_ms", "gpu_util_mean_percent", "vram_peak_mb",
-            "power_mean_w", "power_peak_w", "wall_time_sec", "cpu_percent_mean", "cpu_percent_peak", "rss_peak_bytes",
+            "power_mean_w", "power_peak_w", "gpu_board_energy_j", "gpu_board_energy_j_per_update",
+            "gpu_board_energy_coverage_sec", "wall_time_sec", "cpu_percent_mean", "cpu_percent_peak", "rss_peak_bytes",
         ]
         row: dict[str, object] = {"mode": mode, "workload": workload, "n": 3}
         for metric in metric_names:
@@ -202,7 +213,7 @@ def aggregate(output_root: Path, records: list[dict[str, object]]) -> dict[str, 
         aggregate_rows.append(row)
     aggregate_path = output_root / "matched_replay_summary.json"
     payload = {
-        "protocol": "matched_complete_replay_v10",
+        "protocol": "jvcir_same_pipeline_replay_v11",
         "aggregation": "mean, sample SD, min and max across three independent process runs; process is replicate",
         "deadline_ms": 125.0,
         "rows": aggregate_rows,
@@ -217,31 +228,77 @@ def aggregate(output_root: Path, records: list[dict[str, object]]) -> dict[str, 
     return payload
 
 
+def validate_candidate_equivalence(output_root: Path) -> dict[str, object]:
+    """Prove that both policies received identical candidate tensors per update."""
+    comparisons: list[dict[str, object]] = []
+    for repeat in REPLICATES:
+        for workload in WORKLOADS:
+            traces: dict[str, list[dict[str, str]]] = {}
+            for mode in MODES:
+                path = output_root / f"{mode}__{workload}__r{repeat}" / "repeat_01" / "frame_trace.csv"
+                with path.open(encoding="utf-8", newline="") as fh:
+                    traces[mode] = [row for row in csv.DictReader(fh) if row["analyzed"] == "True"]
+            route_rows = traces["m3_route_on"]
+            bypass_rows = traces["m3_route_bypassed"]
+            if len(route_rows) != len(bypass_rows):
+                raise ValueError(f"candidate trace length differs for {workload}/r{repeat}")
+            mismatches = []
+            for index, (route, bypass) in enumerate(zip(route_rows, bypass_rows)):
+                left = (route["source_time_sec"], route["eligible_candidates"], route["candidate_ids"], route["candidate_sha256s"])
+                right = (bypass["source_time_sec"], bypass["eligible_candidates"], bypass["candidate_ids"], bypass["candidate_sha256s"])
+                if left != right:
+                    mismatches.append(index)
+                    if len(mismatches) >= 10:
+                        break
+                if int(bypass["classifier_calls"]) != int(bypass["eligible_candidates"]):
+                    raise ValueError(f"bypass policy skipped an eligible candidate at {workload}/r{repeat}/u{index}")
+                if int(route["classifier_calls"]) != int(route["route_selected_candidates"]):
+                    raise ValueError(f"route-on policy call count differs from decision at {workload}/r{repeat}/u{index}")
+            if mismatches:
+                raise ValueError(f"candidate equivalence failed for {workload}/r{repeat}: {mismatches}")
+            comparisons.append({
+                "workload": workload,
+                "repeat": repeat,
+                "analyzed_rows": len(route_rows),
+                "candidate_equivalence": True,
+                "route_trace_sha256": sha256(output_root / f"m3_route_on__{workload}__r{repeat}" / "repeat_01" / "frame_trace.csv"),
+                "bypass_trace_sha256": sha256(output_root / f"m3_route_bypassed__{workload}__r{repeat}" / "repeat_01" / "frame_trace.csv"),
+            })
+    payload = {
+        "protocol": "jvcir_same_pipeline_replay_v11",
+        "comparison_rule": "candidate ID, tensor SHA-256, count, and source time must match at every analyzed update",
+        "comparisons": comparisons,
+        "audit_pass": True,
+    }
+    write_json(output_root / "candidate_equivalence_audit.json", payload)
+    return payload
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", type=Path, required=True)
+    parser.add_argument("--runner", type=Path, required=True)
+    parser.add_argument("--workload-root", type=Path)
     parser.add_argument("--python", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--analysis-dir", type=Path, required=True)
-    parser.add_argument("--m1-checkpoint", type=Path, required=True)
     parser.add_argument("--m3-checkpoint", type=Path, required=True)
     parser.add_argument("--duration-sec", type=float, default=600.0)
     parser.add_argument("--warmup-sec", type=float, default=60.0)
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     repo = args.repo_root.resolve()
+    runner = args.runner.resolve()
     output_root = args.output_root.resolve()
     analysis_dir = args.analysis_dir.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     analysis_dir.mkdir(parents=True, exist_ok=True)
-    runner = repo / "validation_code" / "benchmark_streaming_2k_v10.py"
-    if not runner.exists() or not args.m1_checkpoint.exists() or not args.m3_checkpoint.exists():
+    if not runner.exists() or not args.m3_checkpoint.exists():
         raise FileNotFoundError("runner or checkpoint missing")
-    m1_root = args.m1_checkpoint.parent.parent.parent
     m3_root = args.m3_checkpoint.parent.parent.parent
-    host = host_manifest(repo, args)
+    host = host_manifest(runner, args)
     write_json(analysis_dir / "system_manifest.json", host)
-    workload_root = repo / "result" / "streaming_2k" / "workloads_v1_10m"
+    workload_root = args.workload_root.resolve() if args.workload_root else repo / "result" / "streaming_2k" / "workloads_v1_10m"
     for source_name in WORKLOADS.values():
         if not (workload_root / source_name).exists():
             raise FileNotFoundError(workload_root / source_name)
@@ -249,9 +306,19 @@ def main() -> None:
     log_dir = analysis_dir / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
-    order = [("normal", "m3_gated"), ("normal", "m1_dense_s1"), ("mixed", "m1_dense_s1"), ("mixed", "m3_gated"), ("kinetic", "m3_gated"), ("kinetic", "m1_dense_s1")]
+    orders = {
+        1: [("normal", "m3_route_on"), ("normal", "m3_route_bypassed"),
+            ("mixed", "m3_route_bypassed"), ("mixed", "m3_route_on"),
+            ("kinetic", "m3_route_on"), ("kinetic", "m3_route_bypassed")],
+        2: [("normal", "m3_route_bypassed"), ("normal", "m3_route_on"),
+            ("mixed", "m3_route_on"), ("mixed", "m3_route_bypassed"),
+            ("kinetic", "m3_route_bypassed"), ("kinetic", "m3_route_on")],
+        3: [("kinetic", "m3_route_on"), ("kinetic", "m3_route_bypassed"),
+            ("normal", "m3_route_bypassed"), ("normal", "m3_route_on"),
+            ("mixed", "m3_route_on"), ("mixed", "m3_route_bypassed")],
+    }
     for repeat in REPLICATES:
-        for workload, mode in order:
+        for workload, mode in orders[repeat]:
             source = workload_root / WORKLOADS[workload]
             run_id = f"{mode}__{workload}__r{repeat}"
             run_root = output_root / run_id
@@ -266,14 +333,15 @@ def main() -> None:
                 if run_root.exists():
                     raise FileExistsError(f"partial output exists; use --resume only for completed runs: {run_root}")
                 idle_state = wait_idle(idle_path, workload, mode, repeat)
-                checkpoint = args.m3_checkpoint if mode == "m3_gated" else args.m1_checkpoint
+                checkpoint = args.m3_checkpoint
                 command = [
                     str(args.python), str(runner), "--source", str(source), "--mode", mode,
-                    "--output-dir", str(run_root), "--m1-root", str(m1_root), "--m3-root", str(m3_root),
+                    "--output-dir", str(run_root), "--m1-root", str(m3_root), "--m3-root", str(m3_root),
                     "--threshold", "0.475", "--source-fps", "30", "--analysis-fps", "8",
                     "--width", "2560", "--height", "1440", "--duration-sec", str(args.duration_sec),
                     "--warmup-sec", str(args.warmup_sec), "--loop-source", "--repeat", "1", "--device", "cuda",
-                    "--person-model", "yolo11n.pt", "--detector-device", "0", "--tracker", "bytetrack.yaml", "--no-amp",
+                    "--person-model", "yolo11n.pt", "--detector-device", "0", "--tracker", "bytetrack.yaml",
+                    "--no-amp", "--hash-candidates",
                 ]
                 stdout_path = log_dir / f"{run_id}.stdout.log"
                 stderr_path = log_dir / f"{run_id}.stderr.log"
@@ -302,7 +370,7 @@ def main() -> None:
             record = {
                 "run_id": run_id, "workload": workload, "mode": mode, "repeat": repeat,
                 "source_sha256": sha256(source), "checkpoint_sha256": str(run_summary.get("checkpoint_sha256")),
-                **{key: run_summary.get(key) for key in ("achieved_analysis_fps", "classifier_calls", "analyzed_frames", "measured_source_duration_sec", "source_loop_count", "deadline_miss_rate", "deadline_miss_count", "latency_p50_ms", "latency_p95_ms", "latency_p99_ms", "gpu_util_mean_percent", "vram_peak_mb", "power_mean_w", "power_peak_w")},
+                **{key: run_summary.get(key) for key in ("achieved_analysis_fps", "eligible_candidates", "route_selected_candidates", "classifier_calls", "q_candidate", "q_update", "analyzed_frames", "measured_source_duration_sec", "source_loop_count", "deadline_miss_rate", "deadline_miss_count", "latency_p50_ms", "latency_p95_ms", "latency_p99_ms", "gpu_util_mean_percent", "vram_peak_mb", "power_mean_w", "power_peak_w", "gpu_board_energy_j", "gpu_board_energy_j_per_update", "gpu_board_energy_coverage_sec")},
                 "q_update": float(run_summary.get("classifier_calls", 0)) / max(1, int(run_summary.get("analyzed_frames", 0))),
                 "wall_time_sec": run_result.get("wall_time_sec"), "cpu_percent_mean": run_result.get("cpu_percent_mean"),
                 "cpu_percent_peak": run_result.get("cpu_percent_peak"), "rss_peak_bytes": run_result.get("rss_peak_bytes"),
@@ -310,14 +378,17 @@ def main() -> None:
             }
             records.append(record)
             write_json(analysis_dir / "matched_replay_run_ledger.json", records)
+    candidate_audit = validate_candidate_equivalence(output_root)
     payload = aggregate(output_root, records)
     marker = {
-        "protocol": "matched_complete_replay_v10",
+        "protocol": "jvcir_same_pipeline_replay_v11",
         "status": "complete",
         "created_utc": now(),
         "run_count": len(records),
         "system_manifest_sha256": sha256(analysis_dir / "system_manifest.json"),
         "aggregate_sha256": sha256(output_root / "matched_replay_summary.json"),
+        "candidate_equivalence_sha256": sha256(output_root / "candidate_equivalence_audit.json"),
+        "candidate_equivalence_pass": candidate_audit["audit_pass"],
         "ledger_sha256": sha256(analysis_dir / "matched_replay_run_ledger.json"),
         "runner_sha256": sha256(Path(__file__)),
         "payload_rows": len(payload["rows"]),

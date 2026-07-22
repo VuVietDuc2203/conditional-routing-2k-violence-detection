@@ -1,0 +1,13 @@
+{
+  "status": "complete",
+  "protocol": "jvcir_v12_frozen_prediction_video_call_skip_counterfactual",
+  "row_count": 526,
+  "input_hashes": {
+    "m3_predictions_sha256": "a77f0a0d2a7c768c9ee0ecad854bb78c578fc435db0fabd0e3520f4060a68f29",
+    "router_predictions_sha256": "9d4775123fc4c6bae648087e5fe77386b99aadc8f0692ffc16b7f712fe3d0845",
+    "manifest_sha256": "6f300bc7bcc926d99f795bd67229614375a6f489e37441f609c6e8d662be43aa"
+  },
+  "predictions_sha256": "76fd76c3835f3fed4e3489a76c695e2b9a819801f94cc0d67250b145eb3c24f0",
+  "sourcewise_sha256": "d9918f7a6a8b74dab7eee4ebae65b43c44dfd51ceb9dd1932f6691651c6e736d",
+  "summary_sha256": "12bbcd93a15d03e301e70d6e0c1f16c86cdd418950367569fe3041da4713516b"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "complete",
+  "protocol": "jvcir_v12_verified_same_pipeline_replay_postprocessing",
+  "run_count": 18,
+  "candidate_equivalence_pairs": 9,
+  "summary_sha256": "b2fb0bd148a045abeb4f41b4709f0d14719059a43b82de589a49166f8cd5d024",
+  "paired_deltas_sha256": "97b9475702d4fb7c5ca8ac2b28129b8fc1104e7b6e3f87afe00726b8968c5539",
+  "stage_process_means_sha256": "c45e47a6a05b06e40336394f647882287cf1bc2df622a83225ecd8ac7088088f",
+  "stage_summary_sha256": "78718490658562838bc4448c460be77a12af3c82df47ca62fceffb41de3c1251"
+}
